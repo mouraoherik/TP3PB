@@ -1,0 +1,3 @@
+idPedido;idCliente;idInstrumento;dataEntrada;dataEntrega;problemaRelatado;preco;statusPedido
+1;1;1;2026-11-24;;Trastes oxidados e regulagem da ponte flutuante;280.00;PRONTO_PARA_RETIRADA
+2;2;2;2026-11-10;2026-11-18;Vazamento na chave d'água e limpeza geral das sapatilhas;450.50;EM_EXECUCAO
