@@ -32,56 +32,32 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> listarClientes(@RequestParam(required = false)String email){
+    public List<Cliente> listarClientes(){
         return clienteService.listarClientes();
     }
 
     @PostMapping
     public ResponseEntity salvar(@Valid @RequestBody Cliente cliente){
-        for (Cliente checagem : clienteService.listarClientes()){
-            if (cliente.getEmail().equals(checagem.getEmail())){
-                return ResponseEntity.badRequest().body(new ErrorResponse("E-mail ja cadastrado"));
-            }
-        }
+        Cliente criado = clienteService.cadastrarCliente(cliente.getNome(),cliente.getTelefone(),
+                cliente.getEmail(),cliente.getEndereco());
 
-        clienteService.cadastrarCliente(cliente);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity atualizar(@PathVariable Long  id,
-                                    @RequestBody Cliente entrada){
-        if(id <= 0) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Id invalido"));
-        }
+                                    @Valid @RequestBody Cliente entrada){
 
-        Cliente existente = null;
-        for(Cliente cliente : clienteService.listarClientes()){
-            if(cliente.getIdCliente().equals(id)){
-                existente = cliente;
-                break;
-            }
-        }
-        if(existente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Cliente nao localizado"));
-        }
-        existente.setNome(entrada.getNome());
-        existente.setTelefone(entrada.getTelefone());
-        existente.setEmail(entrada.getEmail());
-        existente.setEndereco(entrada.getEndereco());
-        return ResponseEntity.ok().body(existente);
+        clienteService.atualizar(id,entrada.getNome(),entrada.getTelefone(), entrada.getEmail(),
+                entrada.getEndereco());
 
+       return ResponseEntity.ok().body(entrada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deletar(@PathVariable Long id){
-        if (id <= 0 ){
-            return ResponseEntity.badRequest().body(new ErrorResponse("Id invalido"));
-        }
-        boolean removeu = clienteService.remover(id);
-        if (removeu){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Id nao localizado"));
+        clienteService.remover(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,6 +1,7 @@
 package br.com.infnet.tp3pb.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,6 @@ public class Cliente {
     @NotBlank(message = "E-mail e obrigatorio")
     private String email ;
     @NotBlank(message = "Endereco e obrigatorio")
+    @Size(min = 5,message = "Endereco deve ter ao menos 5 caracteres")
     private String endereco;
 }
